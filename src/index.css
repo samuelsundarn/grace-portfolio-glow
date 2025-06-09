@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -269,21 +270,43 @@
 }
 
 /* Enhanced Hero Animations */
-@keyframes heroFadeIn {
+@keyframes heroSlideUp {
   from {
     opacity: 0;
-    transform: translateY(50px) scale(0.9);
+    transform: translateY(100%);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
-@keyframes heroSlideIn {
+@keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(60px);
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes fadeInBounce {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -302,7 +325,7 @@
 
 /* Animation classes */
 .animate-fade-in {
-  animation: heroFadeIn 1s ease-out forwards;
+  animation: fadeInUp 1s ease-out forwards;
   opacity: 0;
 }
 
@@ -361,7 +384,7 @@
 }
 
 .hero-title {
-  animation: heroSlideIn 1.2s ease-out;
+  animation: heroSlideUp 1.2s ease-out;
 }
 
 .skill-card {

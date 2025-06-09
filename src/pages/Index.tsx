@@ -209,7 +209,6 @@ const Index = () => {
   ];
 
   const navbarOpacity = Math.min(scrollY / 300, 0.95);
-  const heroParallax = scrollY * 0.3;
 
   return (
     <div className={`min-h-screen transition-all duration-300 ${isDark ? 'dark' : ''}`}>
@@ -310,113 +309,141 @@ const Index = () => {
         )}
       </nav>
 
-      {/* Enhanced Hero Section with Advanced Parallax */}
+      {/* Enhanced Hero Section with Stunning Minimal Design */}
       <section 
         id="hero"
         ref={heroRef} 
-        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-mint/30 to-background"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--mint) / 0.3) 50%, hsl(var(--background)) 100%)'
+        }}
       >
-        {/* Enhanced Parallax Background Elements */}
-        <div className="absolute inset-0 pointer-events-none">
-          {/* Layer 1 - Slow moving background shapes */}
+        {/* Floating Geometric Elements with Parallax */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {/* Large Background Orbs */}
           <div 
-            className="absolute top-20 left-10 w-64 h-64 bg-coral/5 rounded-full blur-3xl"
+            className="absolute -top-40 -right-40 w-96 h-96 rounded-full opacity-20"
             style={{ 
-              transform: `translateY(${scrollY * 0.1}px) rotate(${scrollY * 0.02}deg) scale(${1 + scrollY * 0.0002})` 
+              background: 'radial-gradient(circle, hsl(var(--coral) / 0.15) 0%, transparent 70%)',
+              transform: `translateY(${scrollY * 0.1}px) scale(${1 + scrollY * 0.0001})`,
+              filter: 'blur(40px)'
             }}
           />
           <div 
-            className="absolute bottom-32 right-16 w-96 h-96 bg-primary/3 rounded-3xl blur-3xl"
+            className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full opacity-15"
             style={{ 
-              transform: `translateY(${-scrollY * 0.15}px) rotate(${-scrollY * 0.03}deg) scale(${1 + scrollY * 0.0001})` 
+              background: 'radial-gradient(circle, hsl(var(--primary) / 0.2) 0%, transparent 70%)',
+              transform: `translateY(${-scrollY * 0.15}px) scale(${1 + scrollY * 0.0002})`,
+              filter: 'blur(60px)'
             }}
           />
-          
-          {/* Layer 2 - Medium speed geometric shapes */}
+
+          {/* Floating Minimal Shapes */}
           <div 
-            className="absolute top-1/3 left-1/3 w-32 h-32 bg-coral/10 rounded-2xl blur-xl"
+            className="absolute top-1/4 left-1/6 w-20 h-20 rounded-full border border-coral/30"
             style={{ 
-              transform: `translateY(${scrollY * 0.2}px) rotate(${scrollY * 0.05}deg)`,
-              opacity: Math.max(0.1, 1 - scrollY * 0.001)
+              transform: `translateY(${scrollY * 0.2}px) rotate(${scrollY * 0.1}deg)`,
+              animation: 'float 6s ease-in-out infinite'
             }}
           />
           <div 
-            className="absolute bottom-1/4 left-1/4 w-48 h-48 bg-primary/8 rounded-full blur-2xl"
+            className="absolute top-1/3 right-1/4 w-16 h-16 rotate-45 border border-primary/20"
             style={{ 
-              transform: `translateY(${-scrollY * 0.25}px) rotate(${scrollY * 0.08}deg)`,
-              opacity: Math.max(0.1, 1 - scrollY * 0.0008)
+              transform: `translateY(${scrollY * 0.25}px) rotate(${45 + scrollY * 0.05}deg)`,
+              animation: 'float 8s ease-in-out infinite reverse'
             }}
           />
-          
-          {/* Layer 3 - Fast moving particles */}
-          {[...Array(30)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full bg-gradient-to-r from-coral/20 to-primary/20"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                width: `${4 + Math.random() * 12}px`,
-                height: `${4 + Math.random() * 12}px`,
-                transform: `translateY(${scrollY * (0.3 + Math.random() * 0.4)}px) rotate(${scrollY * (0.1 + Math.random() * 0.2)}deg)`,
-                opacity: Math.max(0.1, (1 - scrollY * 0.002) * (0.3 + Math.random() * 0.7)),
-                transition: 'opacity 0.3s ease'
-              }}
-            />
-          ))}
-          
-          {/* Interactive mouse-following element */}
           <div 
-            className="absolute w-20 h-20 bg-coral/5 rounded-full blur-xl transition-all duration-300"
+            className="absolute bottom-1/3 left-1/3 w-12 h-12 rounded-full bg-coral/10"
+            style={{ 
+              transform: `translateY(${scrollY * 0.3}px)`,
+              animation: 'float 4s ease-in-out infinite'
+            }}
+          />
+
+          {/* Interactive Mouse Follower */}
+          <div 
+            className="absolute w-32 h-32 rounded-full pointer-events-none transition-all duration-700 ease-out"
             style={{
-              left: mousePosition.x - 40,
-              top: mousePosition.y - 40,
+              left: mousePosition.x - 64,
+              top: mousePosition.y - 64,
+              background: 'radial-gradient(circle, hsl(var(--coral) / 0.1) 0%, transparent 70%)',
               transform: `translateY(${scrollY * 0.1}px)`,
+              filter: 'blur(20px)',
               opacity: 0.6
             }}
           />
         </div>
 
-        {/* Hero Content with Enhanced Parallax */}
-        <div 
-          className="text-center z-10 px-6 max-w-5xl mx-auto"
-          style={{ transform: `translateY(${scrollY * 0.4}px)` }}
-        >
-          {/* Main Title with Staggered Animation */}
-          <div className="space-y-4">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold leading-tight">
-              <span className="block text-primary animate-fade-in opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
-                Nakkina
-              </span>
-              <span className="block bg-gradient-to-r from-primary via-coral to-primary bg-clip-text text-transparent animate-fade-in opacity-0" style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
-                Karunya Grace
-              </span>
-            </h1>
+        {/* Main Hero Content */}
+        <div className="relative z-10 text-center px-6 max-w-6xl mx-auto">
+          {/* Animated Title */}
+          <div className="mb-8">
+            <div className="overflow-hidden">
+              <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif font-light leading-[0.9] tracking-tight">
+                <span 
+                  className="block text-primary opacity-0 translate-y-full"
+                  style={{ 
+                    animation: 'heroSlideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards'
+                  }}
+                >
+                  Nakkina
+                </span>
+                <span 
+                  className="block bg-gradient-to-r from-primary via-coral to-primary bg-clip-text text-transparent opacity-0 translate-y-full"
+                  style={{ 
+                    animation: 'heroSlideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards'
+                  }}
+                >
+                  Karunya Grace
+                </span>
+              </h1>
+            </div>
             
-            {/* Animated Underline */}
-            <div className="mx-auto w-32 h-1 bg-gradient-to-r from-transparent via-coral to-transparent animate-scale-in opacity-0" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }} />
+            {/* Minimal Accent Line */}
+            <div 
+              className="mx-auto mt-6 h-px bg-gradient-to-r from-transparent via-coral to-transparent opacity-0"
+              style={{ 
+                width: '200px',
+                animation: 'fadeInScale 1s ease-out 1.2s forwards'
+              }}
+            />
           </div>
 
-          {/* Tagline */}
-          <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-fade-in opacity-0" style={{ animationDelay: '1s', animationFillMode: 'forwards' }}>
-            Quality-focused <span className="text-coral font-semibold">B.Pharm graduate</span> passionate about 
-            <span className="text-primary font-semibold"> data-driven drug safety</span> & medical coding.
-          </p>
+          {/* Subtitle */}
+          <div 
+            className="mb-12 opacity-0"
+            style={{ 
+              animation: 'fadeInUp 1s ease-out 1.5s forwards'
+            }}
+          >
+            <p className="text-xl md:text-2xl lg:text-3xl font-light text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              Quality-focused <span className="text-coral font-medium">B.Pharm graduate</span> passionate about 
+              <span className="text-primary font-medium"> data-driven drug safety</span> & medical coding.
+            </p>
+          </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in opacity-0" style={{ animationDelay: '1.3s', animationFillMode: 'forwards' }}>
+          <div 
+            className="flex flex-col sm:flex-row gap-6 justify-center mb-16 opacity-0"
+            style={{ 
+              animation: 'fadeInUp 1s ease-out 1.8s forwards'
+            }}
+          >
             <Button 
               onClick={scrollToContact}
-              className="group bg-coral hover:bg-coral/90 text-white px-8 py-6 text-lg rounded-2xl shadow-2xl hover:shadow-coral/25 transition-all duration-500 hover:scale-105 hover:-translate-y-2 border-2 border-coral/20"
+              className="group relative bg-coral hover:bg-coral/90 text-white px-10 py-6 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 border-0 overflow-hidden"
             >
-              <MessageCircle className="mr-3 h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
-              Let's Talk
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-coral/0 via-white/20 to-coral/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="relative z-10 flex items-center">
+                <MessageCircle className="mr-3 h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
+                Let's Talk
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-coral via-coral/80 to-coral opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </Button>
             <Button 
               onClick={handleDownloadCV}
               variant="outline"
-              className="group border-2 border-primary/30 hover:border-primary hover:bg-primary/5 hover:text-primary px-8 py-6 text-lg rounded-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 backdrop-blur-sm"
+              className="group border-2 border-primary/20 hover:border-coral hover:bg-coral/5 hover:text-coral px-10 py-6 text-lg rounded-full transition-all duration-500 hover:scale-105 backdrop-blur-sm"
             >
               <Download className="mr-3 h-5 w-5 transition-transform duration-300 group-hover:-translate-y-1" />
               Download CV
@@ -424,15 +451,31 @@ const Index = () => {
           </div>
 
           {/* Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div 
+            className="opacity-0"
+            style={{ 
+              animation: 'fadeInBounce 1s ease-out 2.2s forwards'
+            }}
+          >
             <button 
               onClick={() => scrollToSection('about')}
-              className="p-3 rounded-full bg-coral/10 hover:bg-coral/20 transition-all duration-300 hover:scale-110"
+              className="group p-4 rounded-full transition-all duration-300 hover:bg-coral/10 hover:scale-110"
             >
-              <ArrowDown className="h-5 w-5 text-coral" />
+              <ArrowDown className="h-6 w-6 text-coral transition-transform duration-300 group-hover:translate-y-1" />
             </button>
+            <p className="text-sm text-muted-foreground mt-2 font-light">Scroll to explore</p>
           </div>
         </div>
+
+        {/* Subtle Pattern Overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.02] pointer-events-none"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--primary)) 1px, transparent 0)`,
+            backgroundSize: '30px 30px',
+            transform: `translateY(${scrollY * 0.05}px)`
+          }}
+        />
       </section>
 
       {/* About & Skills Section */}

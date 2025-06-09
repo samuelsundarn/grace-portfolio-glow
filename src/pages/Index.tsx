@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { Mail, Phone, MapPin, Linkedin, Moon, Sun, Download, MessageCircle, Menu, X, ArrowDown } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Moon, Sun, Download, MessageCircle, Menu, X, ArrowDown, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Index = () => {
   const [isDark, setIsDark] = useState(false);
@@ -14,8 +13,11 @@ const Index = () => {
   const [formData, setFormData] = useState({ name: '', contact: '', message: '' });
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isVisible, setIsVisible] = useState({});
+  const [bubbles, setBubbles] = useState([]);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const heroRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const experienceScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Auto detect system theme preference
@@ -67,6 +69,67 @@ const Index = () => {
       }
     };
   }, []);
+
+  // Enhanced bubble animation system
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+      
+      // Create bubbles on mouse movement during scroll
+      if (Math.random() < 0.1) {
+        createBubble(e.clientX, e.clientY);
+      }
+    };
+
+    const handleScroll = () => {
+      // Create bubbles during scroll
+      if (Math.random() < 0.3) {
+        createBubble(
+          Math.random() * window.innerWidth,
+          Math.random() * window.innerHeight
+        );
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const createBubble = (x, y) => {
+    const newBubble = {
+      id: Date.now() + Math.random(),
+      x,
+      y,
+      size: Math.random() * 20 + 10,
+      opacity: Math.random() * 0.7 + 0.3,
+      duration: Math.random() * 2000 + 1000,
+      color: Math.random() > 0.5 ? 'coral' : 'primary'
+    };
+
+    setBubbles(prev => [...prev, newBubble]);
+
+    // Remove bubble after animation
+    setTimeout(() => {
+      setBubbles(prev => prev.filter(bubble => bubble.id !== newBubble.id));
+    }, newBubble.duration);
+  };
+
+  const scrollExperienceLeft = () => {
+    if (experienceScrollRef.current) {
+      experienceScrollRef.current.scrollBy({ left: -320, behavior: 'smooth' });
+    }
+  };
+
+  const scrollExperienceRight = () => {
+    if (experienceScrollRef.current) {
+      experienceScrollRef.current.scrollBy({ left: 320, behavior: 'smooth' });
+    }
+  };
 
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
@@ -150,6 +213,25 @@ const Index = () => {
 
   return (
     <div className={`min-h-screen transition-all duration-300 ${isDark ? 'dark' : ''}`}>
+      {/* Floating Bubbles */}
+      <div className="fixed inset-0 pointer-events-none z-30">
+        {bubbles.map((bubble) => (
+          <div
+            key={bubble.id}
+            className={`absolute rounded-full bg-${bubble.color}/20 animate-bubble-float`}
+            style={{
+              left: bubble.x,
+              top: bubble.y,
+              width: bubble.size,
+              height: bubble.size,
+              opacity: bubble.opacity,
+              animationDuration: `${bubble.duration}ms`,
+              transform: 'translate(-50%, -50%)'
+            }}
+          />
+        ))}
+      </div>
+
       {/* Transparent Navbar */}
       <nav 
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
@@ -228,98 +310,127 @@ const Index = () => {
         )}
       </nav>
 
-      {/* Hero Section - Redesigned */}
+      {/* Enhanced Hero Section with Advanced Parallax */}
       <section 
         id="hero"
         ref={heroRef} 
         className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-mint/30 to-background"
       >
-        {/* Animated Background Elements */}
+        {/* Enhanced Parallax Background Elements */}
         <div className="absolute inset-0 pointer-events-none">
-          {/* Large Geometric Shapes */}
+          {/* Layer 1 - Slow moving background shapes */}
           <div 
-            className="absolute top-20 left-10 w-32 h-32 bg-coral/10 rounded-full blur-xl animate-pulse"
-            style={{ transform: `translateY(${scrollY * 0.1}px) rotate(${scrollY * 0.05}deg)` }}
+            className="absolute top-20 left-10 w-64 h-64 bg-coral/5 rounded-full blur-3xl"
+            style={{ 
+              transform: `translateY(${scrollY * 0.1}px) rotate(${scrollY * 0.02}deg) scale(${1 + scrollY * 0.0002})` 
+            }}
           />
           <div 
-            className="absolute bottom-32 right-16 w-48 h-48 bg-primary/5 rounded-3xl blur-2xl animate-pulse"
-            style={{ transform: `translateY(${-scrollY * 0.15}px) rotate(${-scrollY * 0.08}deg)`, animationDelay: '1s' }}
-          />
-          <div 
-            className="absolute top-1/2 left-1/4 w-24 h-24 bg-coral/5 rounded-2xl blur-xl animate-pulse"
-            style={{ transform: `translateY(${scrollY * 0.2}px) rotate(${scrollY * 0.1}deg)`, animationDelay: '0.5s' }}
+            className="absolute bottom-32 right-16 w-96 h-96 bg-primary/3 rounded-3xl blur-3xl"
+            style={{ 
+              transform: `translateY(${-scrollY * 0.15}px) rotate(${-scrollY * 0.03}deg) scale(${1 + scrollY * 0.0001})` 
+            }}
           />
           
-          {/* Floating Particles */}
-          {[...Array(20)].map((_, i) => (
+          {/* Layer 2 - Medium speed geometric shapes */}
+          <div 
+            className="absolute top-1/3 left-1/3 w-32 h-32 bg-coral/10 rounded-2xl blur-xl"
+            style={{ 
+              transform: `translateY(${scrollY * 0.2}px) rotate(${scrollY * 0.05}deg)`,
+              opacity: Math.max(0.1, 1 - scrollY * 0.001)
+            }}
+          />
+          <div 
+            className="absolute bottom-1/4 left-1/4 w-48 h-48 bg-primary/8 rounded-full blur-2xl"
+            style={{ 
+              transform: `translateY(${-scrollY * 0.25}px) rotate(${scrollY * 0.08}deg)`,
+              opacity: Math.max(0.1, 1 - scrollY * 0.0008)
+            }}
+          />
+          
+          {/* Layer 3 - Fast moving particles */}
+          {[...Array(30)].map((_, i) => (
             <div
               key={i}
-              className="absolute rounded-full bg-gradient-to-r from-coral/20 to-primary/20 animate-pulse"
+              className="absolute rounded-full bg-gradient-to-r from-coral/20 to-primary/20"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                width: `${4 + Math.random() * 8}px`,
-                height: `${4 + Math.random() * 8}px`,
-                animationDelay: `${Math.random() * 3}s`,
-                transform: `translateY(${scrollY * (0.05 + Math.random() * 0.1)}px)`,
+                width: `${4 + Math.random() * 12}px`,
+                height: `${4 + Math.random() * 12}px`,
+                transform: `translateY(${scrollY * (0.3 + Math.random() * 0.4)}px) rotate(${scrollY * (0.1 + Math.random() * 0.2)}deg)`,
+                opacity: Math.max(0.1, (1 - scrollY * 0.002) * (0.3 + Math.random() * 0.7)),
+                transition: 'opacity 0.3s ease'
               }}
             />
           ))}
+          
+          {/* Interactive mouse-following element */}
+          <div 
+            className="absolute w-20 h-20 bg-coral/5 rounded-full blur-xl transition-all duration-300"
+            style={{
+              left: mousePosition.x - 40,
+              top: mousePosition.y - 40,
+              transform: `translateY(${scrollY * 0.1}px)`,
+              opacity: 0.6
+            }}
+          />
         </div>
 
-        {/* Hero Content */}
-        <div className="text-center z-10 px-6 max-w-5xl mx-auto">
-          <div className="space-y-8">
-            {/* Main Title with Staggered Animation */}
-            <div className="space-y-4">
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold leading-tight">
-                <span className="block text-primary animate-fade-in opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
-                  Nakkina
-                </span>
-                <span className="block bg-gradient-to-r from-primary via-coral to-primary bg-clip-text text-transparent animate-fade-in opacity-0" style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
-                  Karunya Grace
-                </span>
-              </h1>
-              
-              {/* Animated Underline */}
-              <div className="mx-auto w-32 h-1 bg-gradient-to-r from-transparent via-coral to-transparent animate-scale-in opacity-0" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }} />
-            </div>
+        {/* Hero Content with Enhanced Parallax */}
+        <div 
+          className="text-center z-10 px-6 max-w-5xl mx-auto"
+          style={{ transform: `translateY(${scrollY * 0.4}px)` }}
+        >
+          {/* Main Title with Staggered Animation */}
+          <div className="space-y-4">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold leading-tight">
+              <span className="block text-primary animate-fade-in opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
+                Nakkina
+              </span>
+              <span className="block bg-gradient-to-r from-primary via-coral to-primary bg-clip-text text-transparent animate-fade-in opacity-0" style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
+                Karunya Grace
+              </span>
+            </h1>
+            
+            {/* Animated Underline */}
+            <div className="mx-auto w-32 h-1 bg-gradient-to-r from-transparent via-coral to-transparent animate-scale-in opacity-0" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }} />
+          </div>
 
-            {/* Tagline */}
-            <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-fade-in opacity-0" style={{ animationDelay: '1s', animationFillMode: 'forwards' }}>
-              Quality-focused <span className="text-coral font-semibold">B.Pharm graduate</span> passionate about 
-              <span className="text-primary font-semibold"> data-driven drug safety</span> & medical coding.
-            </p>
+          {/* Tagline */}
+          <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-fade-in opacity-0" style={{ animationDelay: '1s', animationFillMode: 'forwards' }}>
+            Quality-focused <span className="text-coral font-semibold">B.Pharm graduate</span> passionate about 
+            <span className="text-primary font-semibold"> data-driven drug safety</span> & medical coding.
+          </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in opacity-0" style={{ animationDelay: '1.3s', animationFillMode: 'forwards' }}>
-              <Button 
-                onClick={scrollToContact}
-                className="group bg-coral hover:bg-coral/90 text-white px-8 py-6 text-lg rounded-2xl shadow-2xl hover:shadow-coral/25 transition-all duration-500 hover:scale-105 hover:-translate-y-2 border-2 border-coral/20"
-              >
-                <MessageCircle className="mr-3 h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
-                Let's Talk
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-coral/0 via-white/20 to-coral/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </Button>
-              <Button 
-                onClick={handleDownloadCV}
-                variant="outline"
-                className="group border-2 border-primary/30 hover:border-primary hover:bg-primary/5 hover:text-primary px-8 py-6 text-lg rounded-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 backdrop-blur-sm"
-              >
-                <Download className="mr-3 h-5 w-5 transition-transform duration-300 group-hover:-translate-y-1" />
-                Download CV
-              </Button>
-            </div>
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in opacity-0" style={{ animationDelay: '1.3s', animationFillMode: 'forwards' }}>
+            <Button 
+              onClick={scrollToContact}
+              className="group bg-coral hover:bg-coral/90 text-white px-8 py-6 text-lg rounded-2xl shadow-2xl hover:shadow-coral/25 transition-all duration-500 hover:scale-105 hover:-translate-y-2 border-2 border-coral/20"
+            >
+              <MessageCircle className="mr-3 h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
+              Let's Talk
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-coral/0 via-white/20 to-coral/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </Button>
+            <Button 
+              onClick={handleDownloadCV}
+              variant="outline"
+              className="group border-2 border-primary/30 hover:border-primary hover:bg-primary/5 hover:text-primary px-8 py-6 text-lg rounded-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 backdrop-blur-sm"
+            >
+              <Download className="mr-3 h-5 w-5 transition-transform duration-300 group-hover:-translate-y-1" />
+              Download CV
+            </Button>
+          </div>
 
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-              <button 
-                onClick={() => scrollToSection('about')}
-                className="p-3 rounded-full bg-coral/10 hover:bg-coral/20 transition-all duration-300 hover:scale-110"
-              >
-                <ArrowDown className="h-5 w-5 text-coral" />
-              </button>
-            </div>
+          {/* Scroll Indicator */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <button 
+              onClick={() => scrollToSection('about')}
+              className="p-3 rounded-full bg-coral/10 hover:bg-coral/20 transition-all duration-300 hover:scale-110"
+            >
+              <ArrowDown className="h-5 w-5 text-coral" />
+            </button>
           </div>
         </div>
       </section>
@@ -377,7 +488,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Experience Timeline */}
+      {/* Enhanced Experience Timeline with Horizontal Scroll Indicators */}
       <section 
         id="experience"
         className="py-20 relative overflow-hidden" 
@@ -394,23 +505,60 @@ const Index = () => {
         />
         <div className="relative z-10 px-6">
           <h2 className="text-4xl font-serif text-primary text-center mb-12">Experience Journey</h2>
-          <div className="max-w-6xl mx-auto">
-            <div className="flex overflow-x-auto gap-6 pb-6 scroll-smooth snap-x snap-mandatory">
+          
+          {/* Horizontal Scroll Indicators */}
+          <div className="max-w-6xl mx-auto relative">
+            <div className="flex items-center justify-center mb-6 gap-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={scrollExperienceLeft}
+                className="rounded-full bg-coral/10 hover:bg-coral/20 transition-all duration-300 hover:scale-110"
+              >
+                <ChevronLeft className="h-4 w-4 text-coral" />
+              </Button>
+              <div className="text-sm text-muted-foreground flex items-center gap-2">
+                <span>Scroll to explore</span>
+                <div className="flex gap-1">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="w-2 h-2 rounded-full bg-coral/30 animate-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
+                  ))}
+                </div>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={scrollExperienceRight}
+                className="rounded-full bg-coral/10 hover:bg-coral/20 transition-all duration-300 hover:scale-110"
+              >
+                <ChevronRight className="h-4 w-4 text-coral" />
+              </Button>
+            </div>
+            
+            <div 
+              ref={experienceScrollRef}
+              className="flex overflow-x-auto gap-6 pb-6 scroll-smooth snap-x snap-mandatory scrollbar-hide"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
               {experiences.map((exp, index) => (
                 <Card 
                   key={index} 
-                  className="min-w-80 snap-start hover:shadow-xl transition-all duration-500 hover:scale-105 hover:-translate-y-2"
+                  className="min-w-80 snap-start hover:shadow-xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 hover:rotate-1"
                   style={{
                     opacity: isVisible['experience'] ? 1 : 0,
                     transform: `translateY(${isVisible['experience'] ? 0 : 30}px)`,
                     transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.2}s`
                   }}
                 >
-                  <CardContent className="p-6">
-                    <div className="text-coral font-semibold text-sm mb-2">{exp.period}</div>
-                    <h3 className="text-xl font-semibold text-primary mb-2">{exp.title}</h3>
-                    <div className="text-muted-foreground font-medium mb-3">{exp.company}</div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{exp.description}</p>
+                  <CardContent className="p-6 relative overflow-hidden">
+                    {/* Card background animation */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-coral/5 to-primary/5 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+                    <div className="relative z-10">
+                      <div className="text-coral font-semibold text-sm mb-2">{exp.period}</div>
+                      <h3 className="text-xl font-semibold text-primary mb-2">{exp.title}</h3>
+                      <div className="text-muted-foreground font-medium mb-3">{exp.company}</div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{exp.description}</p>
+                    </div>
                   </CardContent>
                 </Card>
               ))}

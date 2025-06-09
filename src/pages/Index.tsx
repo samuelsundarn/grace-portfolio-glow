@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { Mail, Phone, MapPin, Linkedin, Moon, Sun, Download, MessageCircle, Menu, X } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Moon, Sun, Download, MessageCircle, Menu, X, ArrowDown } from 'lucide-react';
 
 const Index = () => {
   const [isDark, setIsDark] = useState(false);
@@ -146,22 +146,23 @@ const Index = () => {
   ];
 
   const navbarOpacity = Math.min(scrollY / 300, 0.95);
-  const heroParallax = scrollY * 0.5;
+  const heroParallax = scrollY * 0.3;
 
   return (
     <div className={`min-h-screen transition-all duration-300 ${isDark ? 'dark' : ''}`}>
       {/* Transparent Navbar */}
       <nav 
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
         style={{
           backgroundColor: `hsl(var(--background) / ${navbarOpacity})`,
-          backdropFilter: scrollY > 50 ? 'blur(12px)' : 'none',
-          borderBottom: scrollY > 50 ? '1px solid hsl(var(--border) / 0.1)' : 'none'
+          backdropFilter: scrollY > 50 ? 'blur(20px) saturate(180%)' : 'none',
+          borderBottom: scrollY > 50 ? '1px solid hsl(var(--border) / 0.2)' : 'none',
+          boxShadow: scrollY > 50 ? '0 8px 32px hsl(var(--primary) / 0.1)' : 'none'
         }}
       >
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <div 
-            className="text-xl font-serif font-bold text-primary cursor-pointer transition-transform duration-300 hover:scale-105"
+            className="text-xl font-serif font-bold text-primary cursor-pointer transition-all duration-300 hover:scale-110 hover:text-coral"
             onClick={() => scrollToSection('hero')}
           >
             Karunya Grace
@@ -173,17 +174,17 @@ const Index = () => {
               <button
                 key={item}
                 onClick={() => scrollToSection(item.toLowerCase())}
-                className="text-muted-foreground hover:text-primary transition-all duration-300 relative group"
+                className="text-muted-foreground hover:text-primary transition-all duration-300 relative group py-2"
               >
                 {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-coral transition-all duration-300 group-hover:w-full"></span>
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-coral transition-all duration-300 group-hover:w-full rounded-full"></span>
               </button>
             ))}
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsDark(!isDark)}
-              className="rounded-xl"
+              className="rounded-xl hover:bg-coral/10 transition-all duration-300"
             >
               {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
@@ -202,13 +203,13 @@ const Index = () => {
 
         {/* Mobile Navigation */}
         {isNavOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-12 border-b border-border/10">
-            <div className="px-6 py-4 space-y-4">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-20 border-b border-border/10 shadow-xl">
+            <div className="px-6 py-6 space-y-6">
               {['About', 'Experience', 'Education', 'Contact'].map((item) => (
                 <button
                   key={item}
                   onClick={() => scrollToSection(item.toLowerCase())}
-                  className="block w-full text-left text-muted-foreground hover:text-primary transition-colors duration-300"
+                  className="block w-full text-left text-muted-foreground hover:text-primary transition-colors duration-300 py-2"
                 >
                   {item}
                 </button>
@@ -217,7 +218,7 @@ const Index = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsDark(!isDark)}
-                className="w-full justify-start"
+                className="w-full justify-start hover:bg-coral/10"
               >
                 {isDark ? <Sun className="h-4 w-4 mr-2" /> : <Moon className="h-4 w-4 mr-2" />}
                 {isDark ? 'Light' : 'Dark'} Mode
@@ -227,54 +228,98 @@ const Index = () => {
         )}
       </nav>
 
-      {/* Hero Section */}
+      {/* Hero Section - Redesigned */}
       <section 
         id="hero"
         ref={heroRef} 
-        className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden"
-        style={{ transform: `translateY(${-heroParallax}px)` }}
+        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-mint/30 to-background"
       >
-        {/* Floating Particles with enhanced parallax */}
+        {/* Animated Background Elements */}
         <div className="absolute inset-0 pointer-events-none">
-          {[...Array(15)].map((_, i) => (
+          {/* Large Geometric Shapes */}
+          <div 
+            className="absolute top-20 left-10 w-32 h-32 bg-coral/10 rounded-full blur-xl animate-pulse"
+            style={{ transform: `translateY(${scrollY * 0.1}px) rotate(${scrollY * 0.05}deg)` }}
+          />
+          <div 
+            className="absolute bottom-32 right-16 w-48 h-48 bg-primary/5 rounded-3xl blur-2xl animate-pulse"
+            style={{ transform: `translateY(${-scrollY * 0.15}px) rotate(${-scrollY * 0.08}deg)`, animationDelay: '1s' }}
+          />
+          <div 
+            className="absolute top-1/2 left-1/4 w-24 h-24 bg-coral/5 rounded-2xl blur-xl animate-pulse"
+            style={{ transform: `translateY(${scrollY * 0.2}px) rotate(${scrollY * 0.1}deg)`, animationDelay: '0.5s' }}
+          />
+          
+          {/* Floating Particles */}
+          {[...Array(20)].map((_, i) => (
             <div
               key={i}
-              className="floating-particle absolute rounded-full opacity-20"
+              className="absolute rounded-full bg-gradient-to-r from-coral/20 to-primary/20 animate-pulse"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                width: `${8 + Math.random() * 16}px`,
+                width: `${4 + Math.random() * 8}px`,
                 height: `${4 + Math.random() * 8}px`,
-                animationDelay: `${Math.random() * 5}s`,
-                transform: `translateY(${scrollY * (0.1 + Math.random() * 0.4)}px) rotate(${scrollY * 0.1}deg)`,
+                animationDelay: `${Math.random() * 3}s`,
+                transform: `translateY(${scrollY * (0.05 + Math.random() * 0.1)}px)`,
               }}
             />
           ))}
         </div>
 
-        <div className="text-center z-10 px-6 max-w-4xl mx-auto">
-          <h1 className="hero-title text-6xl md:text-8xl font-serif mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent animate-fade-in">
-            Nakkina Karunya Grace
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            Quality-focused B.Pharm graduate passionate about data-driven drug safety & medical coding.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
-            <Button 
-              onClick={scrollToContact}
-              className="bg-coral hover:bg-coral/90 text-white px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1"
-            >
-              <MessageCircle className="mr-2 h-5 w-5" />
-              Let's Talk
-            </Button>
-            <Button 
-              onClick={handleDownloadCV}
-              variant="outline"
-              className="border-2 border-primary hover:bg-primary hover:text-primary-foreground px-8 py-6 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1"
-            >
-              <Download className="mr-2 h-5 w-5" />
-              Download CV
-            </Button>
+        {/* Hero Content */}
+        <div className="text-center z-10 px-6 max-w-5xl mx-auto">
+          <div className="space-y-8">
+            {/* Main Title with Staggered Animation */}
+            <div className="space-y-4">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold leading-tight">
+                <span className="block text-primary animate-fade-in opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
+                  Nakkina
+                </span>
+                <span className="block bg-gradient-to-r from-primary via-coral to-primary bg-clip-text text-transparent animate-fade-in opacity-0" style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
+                  Karunya Grace
+                </span>
+              </h1>
+              
+              {/* Animated Underline */}
+              <div className="mx-auto w-32 h-1 bg-gradient-to-r from-transparent via-coral to-transparent animate-scale-in opacity-0" style={{ animationDelay: '0.8s', animationFillMode: 'forwards' }} />
+            </div>
+
+            {/* Tagline */}
+            <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-fade-in opacity-0" style={{ animationDelay: '1s', animationFillMode: 'forwards' }}>
+              Quality-focused <span className="text-coral font-semibold">B.Pharm graduate</span> passionate about 
+              <span className="text-primary font-semibold"> data-driven drug safety</span> & medical coding.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in opacity-0" style={{ animationDelay: '1.3s', animationFillMode: 'forwards' }}>
+              <Button 
+                onClick={scrollToContact}
+                className="group bg-coral hover:bg-coral/90 text-white px-8 py-6 text-lg rounded-2xl shadow-2xl hover:shadow-coral/25 transition-all duration-500 hover:scale-105 hover:-translate-y-2 border-2 border-coral/20"
+              >
+                <MessageCircle className="mr-3 h-5 w-5 transition-transform duration-300 group-hover:rotate-12" />
+                Let's Talk
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-coral/0 via-white/20 to-coral/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </Button>
+              <Button 
+                onClick={handleDownloadCV}
+                variant="outline"
+                className="group border-2 border-primary/30 hover:border-primary hover:bg-primary/5 hover:text-primary px-8 py-6 text-lg rounded-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 backdrop-blur-sm"
+              >
+                <Download className="mr-3 h-5 w-5 transition-transform duration-300 group-hover:-translate-y-1" />
+                Download CV
+              </Button>
+            </div>
+
+            {/* Scroll Indicator */}
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+              <button 
+                onClick={() => scrollToSection('about')}
+                className="p-3 rounded-full bg-coral/10 hover:bg-coral/20 transition-all duration-300 hover:scale-110"
+              >
+                <ArrowDown className="h-5 w-5 text-coral" />
+              </button>
+            </div>
           </div>
         </div>
       </section>

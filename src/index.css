@@ -123,6 +123,10 @@
   .backdrop-blur-12 {
     backdrop-filter: blur(12px);
   }
+  
+  .backdrop-blur-20 {
+    backdrop-filter: blur(20px);
+  }
 }
 
 /* Enhanced animations and components */
@@ -160,7 +164,7 @@
 @keyframes scaleIn {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.8);
   }
   to {
     opacity: 1;
@@ -217,9 +221,41 @@
   }
 }
 
+/* Enhanced Hero Animations */
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heroSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroGlow {
+  0%, 100% {
+    text-shadow: 0 0 20px hsl(var(--coral) / 0.3);
+  }
+  50% {
+    text-shadow: 0 0 40px hsl(var(--coral) / 0.5);
+  }
+}
+
 /* Animation classes */
 .animate-fade-in {
-  animation: fadeIn 0.8s ease-out forwards;
+  animation: heroFadeIn 1s ease-out forwards;
   opacity: 0;
 }
 
@@ -229,7 +265,7 @@
 }
 
 .animate-scale-in {
-  animation: scaleIn 0.4s ease-out forwards;
+  animation: scaleIn 0.8s ease-out forwards;
   opacity: 0;
 }
 
@@ -244,11 +280,11 @@
 }
 
 .animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .animate-bounce {
-  animation: bounce 1s infinite;
+  animation: bounce 2s infinite;
 }
 
 .floating-particle {
@@ -266,7 +302,7 @@
 }
 
 .hero-title {
-  animation: slideUp 1s ease-out;
+  animation: heroSlideIn 1.2s ease-out;
 }
 
 .skill-card {
@@ -350,19 +386,11 @@ html {
   background: linear-gradient(180deg, hsl(var(--primary)), hsl(var(--coral)));
 }
 
-/* Parallax performance optimization */
-.hero-section,
-.cta-banner,
-[data-parallax] {
-  will-change: transform;
-  transform-style: preserve-3d;
-}
-
-/* Loading states */
-.loading {
-  opacity: 0.6;
-  pointer-events: none;
-  filter: blur(0.5px);
+/* Enhanced navbar backdrop */
+.navbar-backdrop {
+  backdrop-filter: blur(20px) saturate(180%);
+  background: hsl(var(--background) / 0.8);
+  border-bottom: 1px solid hsl(var(--border) / 0.1);
 }
 
 /* Enhanced button hover effects */
@@ -372,24 +400,11 @@ button, .button {
 
 button:hover, .button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px hsl(var(--coral) / 0.3);
 }
 
 button:active, .button:active {
   transform: translateY(0);
   transition-duration: 0.1s;
-}
-
-/* Card enhance animations */
-.card-entrance {
-  opacity: 0;
-  transform: translateY(30px) scale(0.95);
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.card-entrance.visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
 }
 
 /* Responsive typography enhancements */
@@ -425,13 +440,6 @@ button:active, .button:active {
   color: hsl(var(--primary));
 }
 
-/* Improved input focus effects */
-input:focus,
-textarea:focus {
-  transform: scale(1.02);
-  box-shadow: 0 0 0 3px hsl(var(--coral) / 0.1);
-}
-
 /* Gradient text utilities */
 .gradient-text {
   background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--coral)));
@@ -439,27 +447,3 @@ textarea:focus {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-
-/* Enhanced navbar backdrop */
-.navbar-backdrop {
-  backdrop-filter: blur(12px) saturate(180%);
-  background: hsl(var(--background) / 0.8);
-  border-bottom: 1px solid hsl(var(--border) / 0.1);
-}
-
-/* Stagger animation utility */
-.stagger-children > * {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideUp 0.6s ease-out forwards;
-}
-
-.stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
-.stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
-.stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
-.stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
-.stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
-.stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
-.stagger-children > *:nth-child(7) { animation-delay: 0.7s; }
-.stagger-children > *:nth-child(8) { animation-delay: 0.8s; }
-.stagger-children > *:nth-child(9) { animation-delay: 0.9s; }
